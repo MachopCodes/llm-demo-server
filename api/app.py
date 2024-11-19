@@ -9,7 +9,11 @@ load_dotenv()  # Load environment variables from .env file
 openai.api_key = os.getenv('OPENAI_API_KEY')  # Set your API key
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:3000", "http://localhost:3001", "https://https://machopcodes.github.io/llm-demo-client/"])
+CORS(app, origins=[
+    "http://localhost:3000", 
+    "http://localhost:3001", 
+    "https://https://machopcodes.github.io"
+    ])
 
 
 
