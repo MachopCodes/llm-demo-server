@@ -13,7 +13,7 @@ CORS(app, origins=[
     "http://localhost:3000", 
     "http://localhost:3001", 
     "https://machopcodes.github.io"
-    ])
+    ], supports_credentials=True)
 
 
 
