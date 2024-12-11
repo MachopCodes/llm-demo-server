@@ -1,14 +1,16 @@
 import tensorflow as tf
-from transformers import AutoTokenizer
+from transformers import TFAutoModelForSeq2SeqLM, AutoTokenizer
 
 # Load the tokenizer
 tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-base")  # Replace with your local tokenizer path if needed
 
 # Load the TensorFlow SavedModel
-model = tf.saved_model.load("saved_model/flan_t5_pruned")
-
-# Retrieve the serving function
+model = tf.saved_model.load("api/models/saved_model/flan_t5_pruned")
+# Retrieve the serving function only for TensorFlow SavedModel
 serving_function = model.signatures["serving_default"]
+
+# # try the unquantized model
+# model = TFAutoModelForSeq2SeqLM.from_pretrained("api/models/student_model")
 
 def generate_response(user_input, conversation_history):
     """

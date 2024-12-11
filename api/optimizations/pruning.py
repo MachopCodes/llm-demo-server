@@ -14,7 +14,7 @@ def apply_pruning_to_layers(model):
     # Define the pruning schedule: sparsity gradually increases during training
     pruning_schedule = tfmot.sparsity.keras.PolynomialDecay(
         initial_sparsity=0.0,  # Start with no sparsity
-        final_sparsity=0.5,    # End with 50% sparsity
+        final_sparsity=0.3,    # End with 30% sparsity
         begin_step=0,          # Start pruning at step 0
         end_step=1000          # End pruning by step 1000
     )
