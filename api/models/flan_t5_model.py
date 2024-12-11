@@ -1,43 +1,25 @@
 from transformers import AutoTokenizer, TFAutoModelForSeq2SeqLM
 import tensorflow as tf
 import tensorflow_model_optimization as tfmot
+from optimizations.pruning import apply_pruning_to_layers
 
-# Load the Hugging Face model and tokenizer
+# Load the Hugging Face tokenizer for the FLAN-T5-small model.
+# The tokenizer is responsible for converting text to input IDs and vice versa.
 tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-small")
+
+# Load the pre-trained FLAN-T5-small model from Hugging Face.
+# This is a T5 model specialized for sequence-to-sequence tasks.
 model = TFAutoModelForSeq2SeqLM.from_pretrained("google/flan-t5-small")
 
-# Pruning Configuration
-def apply_pruning_to_layers(model):
-    import tensorflow_model_optimization as tfmot
-
-    # Define pruning parameters
-    pruning_schedule = tfmot.sparsity.keras.PolynomialDecay(
-        initial_sparsity=0.0, final_sparsity=0.5, begin_step=0, end_step=1000
-    )
-
-    # Iterate through the model's layers
-    for i, layer in enumerate(model.layers):
-        # Prune only layers that are compatible
-        if isinstance(layer, tf.keras.layers.Dense) or isinstance(layer, tf.keras.layers.Conv2D):
-            print(f"Pruning layer {i}: {layer.name}")
-            model.layers[i] = tfmot.sparsity.keras.prune_low_magnitude(
-                layer, pruning_schedule=pruning_schedule
-            )
-        else:
-            print(f"Skipping layer {i}: {layer.name} (not compatible)")
-
-    return model
-
-# Apply pruning to the model's layers
+# Apply pruning to the model's layers using a custom function.
+# Pruning reduces the number of weights in the model, potentially improving inference speed and reducing size.
 model = apply_pruning_to_layers(model)
 
-# Compile the pruned model
+# Compile the pruned model with an optimizer and loss function.
+# - Optimizer: Adam optimizer with a learning rate of 1e-4, used to update model weights during training.
+# - Loss: Sparse Categorical Crossentropy, designed for classification tasks with integer labels.
+#   'from_logits=True' indicates that the model outputs raw logits.
 model.compile(
     optimizer=tf.keras.optimizers.Adam(learning_rate=1e-4),
     loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
 )
-
-
-#  include pruning in models/flan_t5_model.py 
-#  because that's where the model is defined and initialized. 
-#  By doing this, the model is pruned when it's first loaded.
