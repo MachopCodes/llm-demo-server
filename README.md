@@ -70,7 +70,7 @@ The trained student model will be saved to `api/models/student_model/`.
 Evaluate the model's performance using the ROUGE metric on a subset of the validation dataset:
 
 ```bash
-python api/scripts/evaluate_model.py
+python api/scripts/evaluate_distillation.py
 ```
 
 ### 3. Apply Pruning

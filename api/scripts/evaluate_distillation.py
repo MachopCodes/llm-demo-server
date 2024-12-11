@@ -1,6 +1,7 @@
 import torch
 from transformers import T5Tokenizer, T5ForConditionalGeneration
-from datasets import load_dataset, load_metric
+from datasets import load_dataset
+import evaluate
 
 def evaluate_model(model_path, dataset_name, split="validation[:1%]"):
     """
@@ -22,8 +23,8 @@ def evaluate_model(model_path, dataset_name, split="validation[:1%]"):
     tokenizer = T5Tokenizer.from_pretrained(model_path)
 
     # Load the specified dataset and evaluation metric (ROUGE in this case)
-    dataset = load_dataset(dataset_name, split=split)
-    rouge = load_metric("rouge")
+    dataset = load_dataset(dataset_name, "3.0.0", split=split)
+    rouge = evaluate.load("rouge")
 
     # Iterate over the dataset to evaluate the model
     for batch in dataset:
@@ -62,4 +63,20 @@ def evaluate_model(model_path, dataset_name, split="validation[:1%]"):
 
 if __name__ == "__main__":
     # Run the evaluation using the student model on the CNN/DailyMail dataset
-    evaluate_model("./models/student_model", "cnn_dailymail")
+    evaluate_model("api/models/student_model", "cnn_dailymail")
+
+
+# 12-11-2024 Evaluation Results: 
+# 'rouge1': 0.12041369528099011,   
+#       Measures the overlap of unigrams (single words) between 
+#       the predicted and reference texts
+# 'rouge2': 0.04015715085214712,   
+#       Measures the overlap of bigrams (two consecutive words).
+# 'rougeL': 0.09846018269836967,   
+#       Focuses on the longest common subsequence (LCS) between 
+#       predicted and reference texts, accounting for sequence ordering.
+# 'rougeLsum': 0.1095096397586956} 
+#       A variation of ROUGE-L used specifically for summarization tasks.
+
+# The evaluation results indicate how well your student model performed based on the ROUGE metric. 
+# Here’s a breakdown: 0.1095: About 10.95% similarity in summary-like results.
