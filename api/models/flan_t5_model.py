@@ -1,7 +1,7 @@
 from transformers import AutoTokenizer, TFAutoModelForSeq2SeqLM
 import tensorflow as tf
 import tensorflow_model_optimization as tfmot
-from optimizations.pruning import apply_pruning_to_layers
+from api.optimizations.pruning import apply_pruning_to_layers
 
 # Load the Hugging Face tokenizer for the FLAN-T5-small model.
 # The tokenizer is responsible for converting text to input IDs and vice versa.
