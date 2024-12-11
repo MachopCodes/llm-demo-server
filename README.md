@@ -13,10 +13,6 @@ This repository is a Python-based demonstration of a lightweight and deployable 
 
 ```
 api/
-├── data/                   # Raw and preprocessed datasets
-│   ├── raw/                # Raw datasets (e.g., downloaded datasets)
-│   ├── processed/          # Preprocessed/tokenized datasets
-│
 ├── models/                 # Models and related utilities
 │   ├── flan_t5_model.py    # Model loading and tokenizer setup
 │   ├── student_model/      # Optimized student model
@@ -37,6 +33,7 @@ api/
 │
 ├── requirements.txt        # Python dependencies
 ├── README.md               # Project overview and instructions
+├── run.py                  # Run Script
 └── .gitignore              # Git ignore rules
 ```
 
